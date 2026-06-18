@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Bus Reservation System — Manage passengers, buses, bookings, and tickets." />
+  <title>Bus Reservation System</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="app">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">🚌</span>
+        <h1 class="brand-name">BusReserve</h1>
+      </div>
+      <div class="sidebar-label">MAIN MENU</div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-link active" data-page="dashboard">
+          <span class="nav-icon">📊</span><span class="nav-text">Dashboard</span>
+        </a>
+        <a href="#" class="nav-link" data-page="passengers">
+          <span class="nav-icon">👥</span><span class="nav-text">Passengers</span>
+        </a>
+        <a href="#" class="nav-link" data-page="buses">
+          <span class="nav-icon">🚍</span><span class="nav-text">Buses</span>
+        </a>
+        <a href="#" class="nav-link" data-page="bookings">
+          <span class="nav-icon">📋</span><span class="nav-text">Bookings</span>
+        </a>
+        <a href="#" class="nav-link" data-page="tickets">
+          <span class="nav-icon">🎫</span><span class="nav-text">Tickets</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-label">SYSTEM</div>
+        <div class="system-info">
+          <span class="status-dot online"></span>
+          <span>LocalStorage Mode</span>
+        </div>
+        <div class="system-info">
+          <small>v1.0.0 — Demo</small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menuToggle" aria-label="Toggle sidebar">☰</button>
+          <h2 class="page-title" id="pageTitle">Dashboard</h2>
+        </div>
+        <div class="header-right">
+          <span class="header-date" id="headerDate"></span>
+          <div class="header-user">
+            <span class="user-avatar">A</span>
+            <span class="user-name">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="content-area">
+
+        <!-- ========== DASHBOARD PAGE ========== -->
+        <section id="page-dashboard" class="page active">
+          <!-- Stats Cards -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-icon passengers-icon">👥</div>
+              <div class="stat-info">
+                <span class="stat-value" id="statPassengers">0</span>
+                <span class="stat-label">Total Passengers</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon buses-icon">🚍</div>
+              <div class="stat-info">
+                <span class="stat-value" id="statBuses">0</span>
+                <span class="stat-label">Total Buses</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bookings-icon">📋</div>
+              <div class="stat-info">
+                <span class="stat-value" id="statBookings">0</span>
+                <span class="stat-label">Total Bookings</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon revenue-icon">💰</div>
+              <div class="stat-info">
+                <span class="stat-value" id="statRevenue">₹0</span>
+                <span class="stat-label">Total Revenue</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats Row -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>Recent Bookings</h3>
+                <a href="#" class="card-action" data-page="bookings">View All →</a>
+              </div>
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Booking ID</th>
+                      <th>Passenger</th>
+                      <th>Route</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentBookingsBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Bus Fleet Overview</h3>
+              </div>
+              <div class="fleet-summary" id="fleetSummary">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== PASSENGERS PAGE ========== -->
+        <section id="page-passengers" class="page">
+          <div class="page-toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="passengerSearch" placeholder="Search passengers..." />
+              </div>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-primary" id="addPassengerBtn">+ Add Passenger</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="passengersTableBody"></tbody>
+              </table>
+            </div>
+            <div class="pagination" id="passengersPagination"></div>
+          </div>
+        </section>
+
+        <!-- ========== BUSES PAGE ========== -->
+        <section id="page-buses" class="page">
+          <div class="page-toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="busSearch" placeholder="Search buses..." />
+              </div>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-primary" id="addBusBtn">+ Add Bus</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bus No.</th>
+                    <th>Type</th>
+                    <th>Route</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Seats</th>
+                    <th>Fare (₹)</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="busesTableBody"></tbody>
+              </table>
+            </div>
+            <div class="pagination" id="busesPagination"></div>
+          </div>
+        </section>
+
+        <!-- ========== BOOKINGS PAGE ========== -->
+        <section id="page-bookings" class="page">
+          <div class="page-toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="bookingSearch" placeholder="Search bookings..." />
+              </div>
+              <select class="filter-select" id="bookingStatusFilter">
+                <option value="">All Status</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Pending">Pending</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-primary" id="addBookingBtn">+ New Booking</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Passenger</th>
+                    <th>Bus No.</th>
+                    <th>Route</th>
+                    <th>Travel Date</th>
+                    <th>Seat</th>
+                    <th>Fare (₹)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTableBody"></tbody>
+              </table>
+            </div>
+            <div class="pagination" id="bookingsPagination"></div>
+          </div>
+        </section>
+
+        <!-- ========== TICKETS PAGE ========== -->
+        <section id="page-tickets" class="page">
+          <div class="page-toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="ticketSearch" placeholder="Enter Booking ID (e.g. BK001)..." />
+              </div>
+              <button class="btn btn-secondary" id="ticketSearchBtn">Search Ticket</button>
+            </div>
+          </div>
+          <div id="ticketResult">
+            <div class="empty-state">
+              <span class="empty-icon">🎫</span>
+              <h3>Search for a Ticket</h3>
+              <p>Enter a Booking ID above to view the ticket details.</p>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /content-area -->
+    </main>
+  </div><!-- /app -->
+
+  <!-- ===== MODAL OVERLAY ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Form</h3>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Dynamic form content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
